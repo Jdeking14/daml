@@ -188,6 +188,7 @@ object TransactionBuilder {
       byKey: Boolean = true,
   ): Exercise =
     Exercise(
+      observers = Set.empty,
       targetCoid = contract.coid,
       templateId = contract.coinst.template,
       choiceId = Ref.ChoiceName.assertFromString(choice),

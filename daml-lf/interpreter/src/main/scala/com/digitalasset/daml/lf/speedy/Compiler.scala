@@ -888,6 +888,7 @@ private[lf] final class Compiler(
             addExprVar(choice.argBinder._1, choiceArgPos)
             compile(choice.controllers)
           },
+          compile(choice.observers),
           mbKey.fold(compileKeyWithMaintainers(tmpl.key))(pos => SBSome(svar(pos))),
         )
       ) { _ =>

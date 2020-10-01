@@ -91,6 +91,7 @@ object Node {
           key = key.map(KeyWithMaintainers.map1(f3)),
         )
       case self @ NodeExercises(
+            _,
             targetCoid,
             _,
             _,
@@ -154,6 +155,7 @@ object Node {
         f2(coid)
         key.foreach(KeyWithMaintainers.foreach1(f3))
       case NodeExercises(
+          observers @ _,
           targetCoid,
           templateId @ _,
           choiceId @ _,
@@ -234,6 +236,7 @@ object Node {
     *     actual validation stage.
     */
   final case class NodeExercises[+Nid, +Cid, +Val](
+      observers: Set[Party], //additional choice observers. -- NICK: re-order after signatories
       targetCoid: Cid,
       override val templateId: TypeConName,
       choiceId: ChoiceName,
@@ -261,6 +264,7 @@ object Node {
       * apply method enforces it.
       */
     def apply[Nid, Cid, Val](
+        observers: Set[Party],
         targetCoid: Cid,
         templateId: TypeConName,
         choiceId: ChoiceName,
@@ -276,6 +280,7 @@ object Node {
         byKey: Boolean,
     ): NodeExercises[Nid, Cid, Val] =
       NodeExercises(
+        observers,
         targetCoid,
         templateId,
         choiceId,
@@ -372,6 +377,7 @@ object Node {
       }
       case ne: NodeExercises[Nothing, Cid, Val] => {
         case NodeExercises(
+            observers2,
             targetCoid2,
             templateId2,
             choiceId2,
@@ -390,7 +396,7 @@ object Node {
           import ne._
           targetCoid === targetCoid2 && templateId == templateId2 && choiceId == choiceId2 &&
           consuming == consuming2 && actingParties == actingParties2 && chosenValue === chosenValue2 &&
-          stakeholders == stakeholders2 && signatories == signatories2 &&
+          stakeholders == stakeholders2 && signatories == signatories2 && observers == observers2 &&
           controllersDifferFromActors == controllersDifferFromActors2 &&
           exerciseResult.fold(true)(_ => exerciseResult === exerciseResult2) &&
           key.fold(true)(_ => key === key2)

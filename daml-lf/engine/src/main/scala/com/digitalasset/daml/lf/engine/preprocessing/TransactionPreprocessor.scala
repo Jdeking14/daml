@@ -46,6 +46,7 @@ private[preprocessing] final class TransactionPreprocessor(
         cmd -> (newLocalCids -> newGlobalCids)
 
       case Node.NodeExercises(
+          observers @ _,
           coid,
           template,
           choice,

@@ -56,6 +56,7 @@ private[dao] trait JdbcLedgerDaoDivulgenceSpec extends LoneElement with Inside {
       val builder = TransactionBuilder()
       val rootExercise = builder.add(
         NodeExercises(
+          observers = Set.empty,
           targetCoid = create1,
           templateId = someTemplateId,
           choiceId = Ref.ChoiceName.assertFromString("SomeChoice"),
@@ -88,6 +89,7 @@ private[dao] trait JdbcLedgerDaoDivulgenceSpec extends LoneElement with Inside {
       )
       val nestedExercise = builder.add(
         NodeExercises(
+          observers = Set.empty,
           targetCoid = create2,
           templateId = someTemplateId,
           choiceId = Ref.ChoiceName.assertFromString("SomeChoice"),

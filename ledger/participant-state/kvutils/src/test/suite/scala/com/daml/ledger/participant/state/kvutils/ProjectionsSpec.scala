@@ -37,6 +37,7 @@ class ProjectionsSpec extends WordSpec with Matchers {
       stakeholders: Set[Party],
   ) =
     Node.NodeExercises(
+      observers = Set.empty,
       targetCoid = target,
       templateId = Identifier(
         PackageId.assertFromString("some-package"),

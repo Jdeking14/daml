@@ -218,6 +218,7 @@ object TransactionSpec {
       hasExerciseResult: Boolean = true,
   ): NodeExercises[NodeId, V.ContractId, Value] =
     NodeExercises(
+      observers = Set.empty,
       targetCoid = cid,
       templateId = Ref.Identifier(
         Ref.PackageId.assertFromString("-dummyPkg-"),
@@ -230,7 +231,6 @@ object TransactionSpec {
       chosenValue = V.ValueUnit,
       stakeholders = Set.empty,
       signatories = Set.empty,
-      controllersDifferFromActors = false,
       children = children,
       exerciseResult = if (hasExerciseResult) Some(V.ValueUnit) else None,
       key = None,

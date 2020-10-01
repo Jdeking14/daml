@@ -122,8 +122,8 @@ object Util {
 
   private[this] def toSignature(choice: TemplateChoice): TemplateChoiceSignature =
     choice match {
-      case TemplateChoice(name, consuming, _, selfBinder, argBinder, returnType, _) =>
-        TemplateChoiceSignature(name, consuming, (), selfBinder, argBinder, returnType, ())
+      case TemplateChoice(name, consuming, _, _, selfBinder, argBinder, returnType, _) =>
+        TemplateChoiceSignature(name, consuming, (), (), selfBinder, argBinder, returnType, ())
     }
 
   private[this] def toSignature(key: TemplateKey): TemplateKeySignature =

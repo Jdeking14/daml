@@ -125,6 +125,7 @@ class AstSpec extends WordSpec with TableDrivenPropertyChecks with Matchers {
       name = name,
       consuming = true,
       controllers = eParties,
+      observers = eParties,
       selfBinder = Name.assertFromString("self"),
       argBinder = Name.assertFromString("arg") -> TUnit,
       returnType = TUnit,
