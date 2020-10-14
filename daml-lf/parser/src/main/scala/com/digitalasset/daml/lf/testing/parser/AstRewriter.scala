@@ -230,7 +230,7 @@ private[daml] class AstRewriter(
           name,
           consuming,
           apply(controllers),
-          apply(observers),
+          observers.map(apply),
           selfBinder,
           (argBinderVar, apply(argBinderType)),
           apply(returnType),

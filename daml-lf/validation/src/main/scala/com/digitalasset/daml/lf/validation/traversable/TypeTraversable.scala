@@ -186,7 +186,10 @@ private[validation] object TypeTraversable {
           retType,
           update) =>
         foreach(controllers, f)
-        foreach(observers, f)
+        observers match {
+          case Some(observers) => foreach(observers, f)
+          case None => ()
+        }
         foreach(update, f)
         f(boundedVarType)
         f(retType)

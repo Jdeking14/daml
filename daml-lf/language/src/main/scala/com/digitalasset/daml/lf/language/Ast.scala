@@ -628,7 +628,7 @@ object Ast {
       name: ChoiceName, // Name of the choice.
       consuming: Boolean, // Flag indicating whether exercising the choice consumes the contract.
       controllers: E, // Parties that can exercise the choice.
-      observers: E, // Additional parties that can observe the choice.
+      observers: Option[E], // Additional parties that can observe the choice.
       selfBinder: ExprVarName, // Self ContractId binder.
       argBinder: (ExprVarName, Type), // Choice argument binder.
       returnType: Type, // Return type of the choice follow-up.
@@ -640,7 +640,7 @@ object Ast {
         name: ChoiceName,
         consuming: Boolean,
         controllers: E,
-        observers: E,
+        observers: Option[E],
         selfBinder: ExprVarName,
         argBinder: (ExprVarName, Type),
         returnType: Type,
@@ -657,7 +657,7 @@ object Ast {
         update)
 
     def unapply(arg: GenTemplateChoice[E])
-      : Option[(ChoiceName, Boolean, E, E, ExprVarName, (ExprVarName, Type), Type, E)] =
+      : Option[(ChoiceName, Boolean, E, Option[E], ExprVarName, (ExprVarName, Type), Type, E)] =
       GenTemplateChoice.unapply(arg)
   }
 

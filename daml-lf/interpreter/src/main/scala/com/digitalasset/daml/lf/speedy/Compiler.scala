@@ -887,8 +887,14 @@ private[lf] final class Compiler(
           {
             addExprVar(choice.argBinder._1, choiceArgPos)
             compile(choice.controllers)
+          }, //
+          {
+            val observers = choice.observers match {
+              case Some(observers) => observers
+              case None => ENil(TBuiltin(BTParty))
+            }
+            compile(observers)
           },
-          compile(choice.observers),
           mbKey.fold(compileKeyWithMaintainers(tmpl.key))(pos => SBSome(svar(pos))),
         )
       ) { _ =>

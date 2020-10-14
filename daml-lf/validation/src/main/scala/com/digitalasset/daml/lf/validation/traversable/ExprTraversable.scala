@@ -151,7 +151,7 @@ private[validation] object ExprTraversable {
           returnType @ _,
           update) =>
         f(controllers)
-        f(observers)
+        observers.map(f)
         f(update)
         ()
     }
