@@ -660,9 +660,14 @@ checkTemplateChoice tpl (TemplateChoice _loc _ _ controllers observers selfBinde
   checkType paramType KStar
   checkType retType KStar
   introExprVar param paramType $ checkExpr controllers (TList TParty)
-  introExprVar param paramType $ checkExpr observers (TList TParty)
+  introExprVar param paramType $ checkOptionalChoiceObservers observers
   introExprVar selfBinder (TContractId (TCon tpl)) $ introExprVar param paramType $
     checkExpr upd (TUpdate retType)
+
+checkOptionalChoiceObservers :: MonadGamma m => Maybe Expr -> m ()
+checkOptionalChoiceObservers = \case
+  Nothing -> pure () -- NICK: ensure version is recent enough
+  Just expr -> checkExpr expr (TList TParty)
 
 checkTemplate :: MonadGamma m => Module -> Template -> m ()
 checkTemplate m t@(Template _loc tpl param precond signatories observers text choices mbKey) = do

@@ -319,11 +319,16 @@ decodeChoice LF1.TemplateChoice{..} =
     <*> decodeName ChoiceName templateChoiceName
     <*> pure templateChoiceConsuming
     <*> mayDecode "templateChoiceControllers" templateChoiceControllers decodeExpr
-    <*> decodeExprPartyListMaybe templateChoiceObservers
+    <*> decodeExprMaybe templateChoiceObservers
     <*> decodeName ExprVarName templateChoiceSelfBinder
     <*> mayDecode "templateChoiceArgBinder" templateChoiceArgBinder decodeVarWithType
     <*> mayDecode "templateChoiceRetType" templateChoiceRetType decodeType
     <*> mayDecode "templateChoiceUpdate" templateChoiceUpdate decodeExpr
+
+decodeExprMaybe :: Maybe LF1.Expr -> Decode (Maybe Expr)
+decodeExprMaybe = \case
+  Just expr -> fmap Just (decodeExpr expr)
+  Nothing -> pure Nothing
 
 decodeBuiltinFunction :: LF1.BuiltinFunction -> Decode BuiltinExpr
 decodeBuiltinFunction = pure . \case
@@ -472,11 +477,6 @@ decodeExpr :: LF1.Expr -> Decode Expr
 decodeExpr (LF1.Expr mbLoc exprSum) = case mbLoc of
   Nothing -> decodeExprSum exprSum
   Just loc -> ELocation <$> decodeLocation loc <*> decodeExprSum exprSum
-
-decodeExprPartyListMaybe :: Maybe LF1.Expr -> Decode Expr
-decodeExprPartyListMaybe = \case
-  Just expr -> decodeExpr expr
-  Nothing -> return $ ENil TParty
 
 decodeExprSum :: Maybe LF1.ExprSum -> Decode Expr
 decodeExprSum exprSum = mayDecode "exprSum" exprSum $ \case

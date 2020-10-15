@@ -810,7 +810,7 @@ data TemplateChoice = TemplateChoice
   , chcControllers :: !Expr
     -- ^ The controllers of the choice. They have type @List Party@ and the
     -- template parameter in scope, and (since 1.2) also the choice parameter.
-  , chcObservers :: !Expr
+  , chcObservers :: !(Maybe Expr)
     -- ^ The controllers of the choice. They have type @List Party@
   , chcSelfBinder :: !ExprVarName
     -- ^ Variable to bind the ContractId of the contract this choice is

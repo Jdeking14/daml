@@ -60,7 +60,7 @@ templateChoiceExpr :: Traversal' TemplateChoice Expr
 templateChoiceExpr f (TemplateChoice loc name consuming controllers observers selfBinder argBinder typ update) =
   TemplateChoice loc name consuming
   <$> f controllers
-  <*> f observers
+  <*> traverse f observers
   <*> pure selfBinder
   <*> pure argBinder
   <*> pure typ

@@ -655,7 +655,7 @@ convertChoice env tbinds (ChoiceData ty expr)
         , chcName = choiceName
         , chcConsuming = consuming == Consuming
         , chcControllers = controllers `ETmApp` EVar this `ETmApp` EVar arg
-        , chcObservers = ENil TParty -- NICK
+        , chcObservers = Nothing -- NICK, need syntax for non-empty choice-observers
         , chcSelfBinder = self
         , chcArgBinder = (arg, choiceTy)
         , chcReturnType = choiceRetTy
