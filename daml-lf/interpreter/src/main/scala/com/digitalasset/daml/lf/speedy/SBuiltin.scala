@@ -895,7 +895,7 @@ private[lf] object SBuiltin {
     *    -> ContractId arg                                1 (contract to exercise)
     *    -> List Party                                    2 (actors)
     *    -> List Party                                    3 (signatories)
-    *    -> List Party                                    4 (contract observers)
+    *    -> List Party                                    4 (template observers)
     *    -> List Party                                    5 (choice controllers)
     *    -> List Party                                    6 (choice observers)
     *    -> Optional {key: key, maintainers: List Party}  7 (template key, if present)
@@ -923,7 +923,7 @@ private[lf] object SBuiltin {
         case v => crash(s"expect optional parties, got: $v")
       }
       val sigs = extractParties(args.get(3))
-      val contractObs = extractParties(args.get(4))
+      val templateObservers = extractParties(args.get(4))
       val ctrls = extractParties(args.get(5))
       val choiceObservers = extractParties(args.get(6))
 
@@ -940,7 +940,7 @@ private[lf] object SBuiltin {
           consuming = consuming,
           actingParties = optActors.getOrElse(ctrls),
           signatories = sigs,
-          stakeholders = sigs union contractObs,
+          stakeholders = sigs union templateObservers,
           controllers = ctrls,
           choiceObservers = choiceObservers,
           mbKey = mbKey,

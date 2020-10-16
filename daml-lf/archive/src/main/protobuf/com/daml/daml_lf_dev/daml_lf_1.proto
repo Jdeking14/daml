@@ -1211,7 +1211,7 @@ message TemplateChoice {
   // conjunctive choice controllers).
   Expr controllers = 3;
 
-  // The (additional) observers of the choice. They have type `List Party`.
+  // The additional informees of the choice. They have type `List Party`.
   Expr observers = 11; // *Available in versions >= 1.dev*
 
   // Name to which the choice argument is bound and its type.
