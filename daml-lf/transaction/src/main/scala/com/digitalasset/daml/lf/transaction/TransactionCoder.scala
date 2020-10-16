@@ -146,6 +146,7 @@ object TransactionCoder {
       minContractKeyInExercise,
       minMaintainersInExercise,
       minContractKeyInFetch,
+      minChoiceObservers,
     }
     node match {
       case nc @ NodeCreate(_, _, _, _, _, _) =>
@@ -205,6 +206,12 @@ object TransactionCoder {
 
       case ne @ NodeExercises(_, _, _, _, _, _, _, _, _, _, _, _, _, _, _) =>
         for {
+          _ <- Either.cond(
+            test =
+              !((transactionVersion precedes minChoiceObservers) && ne.choiceObservers.nonEmpty),
+            right = (),
+            left = EncodeError(transactionVersion, isTooOldFor = "non-empty choice-observers")
+          )
           argValue <- encodeValue(encodeCid, ne.chosenValue)
           retValue <- ne.exerciseResult traverse (v => encodeValue(encodeCid, v))
           exBuilder = TransactionOuterClass.NodeExercise
@@ -217,7 +224,7 @@ object TransactionCoder {
             .addAllChildren(ne.children.map(encodeNid.asString).toList.asJava)
             .addAllSignatories(ne.signatories.toSet[String].asJava)
             .addAllStakeholders(ne.stakeholders.toSet[String].asJava)
-            .addAllObservers(ne.choiceObservers.toSet[String].asJava) //NICK: check empty for versions before minChoiceObservers
+            .addAllObservers(ne.choiceObservers.toSet[String].asJava)
           encodedCid <- encodeCid.encode(transactionVersion, ne.targetCoid)
           controllers <- if (transactionVersion precedes minNoControllers)
             Either.cond(
@@ -311,6 +318,7 @@ object TransactionCoder {
       minContractKeyInExercise,
       minMaintainersInExercise,
       minContractKeyInFetch,
+      minChoiceObservers,
     }
     protoNode.getNodeTypeCase match {
       case NodeTypeCase.CREATE =>
@@ -421,7 +429,12 @@ object TransactionCoder {
           }
           signatories <- toPartySet(protoExe.getSignatoriesList)
           stakeholders <- toPartySet(protoExe.getStakeholdersList)
-          choiceObservers <- toPartySet(protoExe.getObserversList) //NICK: check empty for versions before minChoiceObservers
+          choiceObservers <- toPartySet(protoExe.getObserversList)
+          _ <- Either.cond(
+            test = !((txVersion precedes minChoiceObservers) && choiceObservers.nonEmpty),
+            right = (),
+            left = DecodeError(txVersion, isTooOldFor = "non-empty choice-observers")
+          )
           choiceName <- toIdentifier(protoExe.getChoice)
         } yield
           (
@@ -659,7 +672,13 @@ object TransactionCoder {
           actingParties_ <- toPartySet(protoExe.getActorsList)
           signatories_ <- toPartySet(protoExe.getSignatoriesList)
           stakeholders_ <- toPartySet(protoExe.getStakeholdersList)
-          choiceObservers_ <- toPartySet(protoExe.getObserversList) //NICK: check empty for versions before minChoiceObservers
+          choiceObservers_ <- toPartySet(protoExe.getObserversList)
+          _ <- Either.cond(
+            test =
+              !((txVersion precedes TransactionVersions.minChoiceObservers) && choiceObservers_.nonEmpty),
+            right = (),
+            left = DecodeError(txVersion, isTooOldFor = "non-empty choice-observers")
+          )
         } yield {
           new NodeInfo.Exercise {
             def signatories = signatories_
