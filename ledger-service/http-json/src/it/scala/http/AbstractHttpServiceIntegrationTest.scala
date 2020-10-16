@@ -90,18 +90,18 @@ trait AbstractHttpServiceIntegrationTestFuns extends StrictLogging {
   protected val metdata2: MetadataReader.LfMetadata =
     MetadataReader.readFromDar(dar2).valueOr(e => fail(s"Cannot read dar2 metadata: $e"))
 
-  protected def jwtForParties(parties: List[String]) = {
+  protected def jwtForParties(actAs: List[String], readAs: List[String] = List()) = {
     import AuthServiceJWTCodec.JsonImplicits._
     val decodedJwt = DecodedJwt(
       """{"alg": "HS256", "typ": "JWT"}""",
       AuthServiceJWTPayload(
         ledgerId = Some(testId),
         applicationId = Some("test"),
-        actAs = parties,
+        actAs = actAs,
+        readAs = readAs,
         participantId = None,
         exp = None,
         admin = false,
-        readAs = List()
       ).toJson.prettyPrint
     )
     JwtSigner.HMAC256
@@ -168,8 +168,8 @@ trait AbstractHttpServiceIntegrationTestFuns extends StrictLogging {
 
   protected val headersWithAuth = authorizationHeader(jwt)
 
-  protected def headersWithPartyAuth(parties: List[String]) =
-    authorizationHeader(jwtForParties(parties))
+  protected def headersWithPartyAuth(actAs: List[String], readAs: List[String] = List()) =
+    authorizationHeader(jwtForParties(actAs, readAs))
 
   protected def authorizationHeader(token: Jwt): List[Authorization] =
     List(Authorization(OAuth2BearerToken(token.value)))
@@ -791,6 +791,24 @@ abstract class AbstractHttpServiceIntegrationTest
           expectedOneErrorMessage(output) should include(
             "missing Authorization header with OAuth 2.0 Bearer Token")
       }: Future[Assertion]
+  }
+
+  "create IOU should support extra readAs parties" in withHttpService { (uri, encoder, _) =>
+    import encoder.implicits._
+
+    val command: domain.CreateCommand[v.Record] = iouCreateCommand()
+    val input: JsValue = SprayJson.encode1(command).valueOr(e => fail(e.shows))
+
+    postJsonRequest(
+      uri.withPath(Uri.Path("/v1/create")),
+      input,
+      headers = headersWithPartyAuth(actAs = List("Alice"), readAs = List("Bob"))).flatMap {
+      case (status, output) =>
+        status shouldBe StatusCodes.OK
+        assertStatus(output, StatusCodes.OK)
+        val activeContract = getResult(output)
+        assertActiveContract(activeContract)(command, encoder)
+    }: Future[Assertion]
   }
 
   "create IOU with unsupported templateId should return proper error" in withHttpService {
