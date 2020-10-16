@@ -475,7 +475,7 @@ class ParsersSpec extends WordSpec with TableDrivenPropertyChecks with Matchers 
               name = n"Sleep",
               consuming = true,
               controllers = e"Cons @Party [person] (Nil @Party)",
-              observers = None, // NICK, was: e"Nil @Party",
+              observers = None, //NICK, need to test the Some case also
               selfBinder = n"self",
               argBinder = n"u" -> TUnit,
               returnType = t"ContractId Mod:Person",
@@ -485,7 +485,7 @@ class ParsersSpec extends WordSpec with TableDrivenPropertyChecks with Matchers 
               name = n"Nap",
               consuming = false,
               controllers = e"Cons @Party [person] (Nil @Party)",
-              observers = None, // NICK, was: e"Nil @Party",
+              observers = None,
               selfBinder = n"self",
               argBinder = n"i" -> TInt64,
               returnType = t"Int64",

@@ -546,7 +546,7 @@ pPrintTemplateChoice lvl modName tpl (TemplateChoice mbLoc name isConsuming cont
       , if levelHasTypes lvl then docHasType <-> pPrintPrec lvl 0 retType else empty
       ]
     , nest 2 (keyword_ "controller" <-> pPrintPrec lvl 0 controllers)
-    , nest 2 (keyword_ "observers" <-> pPrintPrec lvl 0 observers)
+    , nest 2 (keyword_ "observer" <-> pPrintPrec lvl 0 observers)
     , nest 2 (keyword_ "do" <-> pPrintPrec lvl 0 update)
     ]
 

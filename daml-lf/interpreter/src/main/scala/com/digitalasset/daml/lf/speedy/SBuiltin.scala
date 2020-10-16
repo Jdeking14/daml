@@ -925,7 +925,7 @@ private[lf] object SBuiltin {
       val sigs = extractParties(args.get(3))
       val contractObs = extractParties(args.get(4))
       val ctrls = extractParties(args.get(5))
-      val observers = extractParties(args.get(6))
+      val choiceObservers = extractParties(args.get(6))
 
       val mbKey = extractOptionalKeyWithMaintainers(args.get(7))
       val auth = machine.auth
@@ -942,7 +942,7 @@ private[lf] object SBuiltin {
           signatories = sigs,
           stakeholders = sigs union contractObs,
           controllers = ctrls,
-          observers = observers,
+          choiceObservers = choiceObservers,
           mbKey = mbKey,
           byKey = byKey,
           chosenValue = arg,

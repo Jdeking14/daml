@@ -891,7 +891,8 @@ private[lf] final class Compiler(
           {
             val observers = choice.observers match {
               case Some(observers) => observers
-              case None => ENil(TBuiltin(BTParty))
+              case None =>
+                ENil(TBuiltin(BTParty)) //NICK: construct value directly, something like --  SValue.SValue.EmptyList
             }
             compile(observers)
           },

@@ -46,7 +46,6 @@ private[preprocessing] final class TransactionPreprocessor(
         cmd -> (newLocalCids -> newGlobalCids)
 
       case Node.NodeExercises(
-          observers @ _,
           coid,
           template,
           choice,
@@ -56,6 +55,7 @@ private[preprocessing] final class TransactionPreprocessor(
           chosenVal,
           stakeholders @ _,
           signatories @ _,
+          choiceObservers @ _,
           controllersDifferFromActors @ _,
           children @ _,
           exerciseResult @ _,

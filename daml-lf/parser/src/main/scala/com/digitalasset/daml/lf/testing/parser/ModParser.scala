@@ -141,7 +141,7 @@ private[parser] class ModParser[P](parameters: ParserParameters[P]) {
           name,
           !choiceTags(nonConsumingTag),
           controllers,
-          observers = None, //ENil(TBuiltin(BTParty)), //NICK, extend parser for (optional?) observers.
+          observers = None, //NICK, extend parser for optional choice-observers
           self,
           param,
           retTyp,

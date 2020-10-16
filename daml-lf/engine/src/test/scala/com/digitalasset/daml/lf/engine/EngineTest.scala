@@ -979,13 +979,13 @@ class EngineTest
       bobView.nodes.size shouldBe 2
       findNodeByIdx(bobView.nodes, 0).getOrElse(fail("node not found")) match {
         case Node.NodeExercises(
-            _,
             coid,
             _,
             choice,
             _,
             consuming,
             actingParties,
+            _,
             _,
             _,
             _,
@@ -1879,12 +1879,12 @@ object EngineTest {
                   (
                     _,
                     Node.NodeExercises(
-                      _,
                       targetCoid: ContractId,
                       _,
                       _,
                       _,
                       true,
+                      _,
                       _,
                       _,
                       _,

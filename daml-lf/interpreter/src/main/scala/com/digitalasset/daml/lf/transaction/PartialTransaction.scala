@@ -111,7 +111,7 @@ private[lf] object PartialTransaction {
       signatories: Set[Party],
       stakeholders: Set[Party],
       controllers: Set[Party],
-      observers: Set[Party],
+      choiceObservers: Set[Party],
       nodeId: NodeId,
       parent: Context,
       byKey: Boolean
@@ -353,7 +353,7 @@ private[lf] case class PartialTransaction(
       signatories: Set[Party],
       stakeholders: Set[Party],
       controllers: Set[Party],
-      observers: Set[Party],
+      choiceObservers: Set[Party],
       mbKey: Option[Node.KeyWithMaintainers[Value[Nothing]]],
       byKey: Boolean,
       chosenValue: Value[Value.ContractId],
@@ -379,7 +379,7 @@ private[lf] case class PartialTransaction(
           signatories = signatories,
           stakeholders = stakeholders,
           controllers = controllers,
-          observers = observers,
+          choiceObservers = choiceObservers,
           nodeId = nid,
           parent = context,
           byKey = byKey
@@ -410,7 +410,6 @@ private[lf] case class PartialTransaction(
     context.exeContext match {
       case Some(ec) =>
         val exerciseNode = Node.NodeExercises(
-          observers = ec.observers,
           targetCoid = ec.targetId,
           templateId = ec.templateId,
           choiceId = ec.choiceId,
@@ -420,6 +419,7 @@ private[lf] case class PartialTransaction(
           chosenValue = ec.chosenValue,
           stakeholders = ec.stakeholders,
           signatories = ec.signatories,
+          choiceObservers = ec.choiceObservers,
           controllersDifferFromActors = ec.controllers != ec.actingParties,
           children = context.children.toImmArray,
           exerciseResult = Some(value),

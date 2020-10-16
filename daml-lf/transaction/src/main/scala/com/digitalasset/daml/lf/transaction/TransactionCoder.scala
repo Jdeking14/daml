@@ -217,7 +217,7 @@ object TransactionCoder {
             .addAllChildren(ne.children.map(encodeNid.asString).toList.asJava)
             .addAllSignatories(ne.signatories.toSet[String].asJava)
             .addAllStakeholders(ne.stakeholders.toSet[String].asJava)
-            .addAllObservers(ne.observers.toSet[String].asJava)
+            .addAllObservers(ne.choiceObservers.toSet[String].asJava) //NICK: check empty for versions before minChoiceObservers
           encodedCid <- encodeCid.encode(transactionVersion, ne.targetCoid)
           controllers <- if (transactionVersion precedes minNoControllers)
             Either.cond(
@@ -421,13 +421,12 @@ object TransactionCoder {
           }
           signatories <- toPartySet(protoExe.getSignatoriesList)
           stakeholders <- toPartySet(protoExe.getStakeholdersList)
-          observers <- toPartySet(protoExe.getObserversList)
+          choiceObservers <- toPartySet(protoExe.getObserversList) //NICK: check empty for versions before minChoiceObservers
           choiceName <- toIdentifier(protoExe.getChoice)
         } yield
           (
             ni,
             NodeExercises(
-              observers = observers,
               targetCoid = targetCoid,
               templateId = templateId,
               choiceId = choiceName,
@@ -437,6 +436,7 @@ object TransactionCoder {
               chosenValue = cv,
               stakeholders = stakeholders,
               signatories = signatories,
+              choiceObservers = choiceObservers,
               controllersDifferFromActors = controllersDifferFromActors,
               children = children,
               exerciseResult = rv,
@@ -659,13 +659,13 @@ object TransactionCoder {
           actingParties_ <- toPartySet(protoExe.getActorsList)
           signatories_ <- toPartySet(protoExe.getSignatoriesList)
           stakeholders_ <- toPartySet(protoExe.getStakeholdersList)
-          observers_ <- toPartySet(protoExe.getObserversList)
+          choiceObservers_ <- toPartySet(protoExe.getObserversList) //NICK: check empty for versions before minChoiceObservers
         } yield {
           new NodeInfo.Exercise {
             def signatories = signatories_
             def stakeholders = stakeholders_
             def actingParties = actingParties_
-            def observers = observers_
+            def choiceObservers = choiceObservers_
             def consuming = protoExe.getConsuming
           }
         }

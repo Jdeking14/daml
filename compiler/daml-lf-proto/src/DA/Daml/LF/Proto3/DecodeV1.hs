@@ -319,16 +319,11 @@ decodeChoice LF1.TemplateChoice{..} =
     <*> decodeName ChoiceName templateChoiceName
     <*> pure templateChoiceConsuming
     <*> mayDecode "templateChoiceControllers" templateChoiceControllers decodeExpr
-    <*> decodeExprMaybe templateChoiceObservers
+    <*> traverse decodeExpr templateChoiceObservers
     <*> decodeName ExprVarName templateChoiceSelfBinder
     <*> mayDecode "templateChoiceArgBinder" templateChoiceArgBinder decodeVarWithType
     <*> mayDecode "templateChoiceRetType" templateChoiceRetType decodeType
     <*> mayDecode "templateChoiceUpdate" templateChoiceUpdate decodeExpr
-
-decodeExprMaybe :: Maybe LF1.Expr -> Decode (Maybe Expr)
-decodeExprMaybe = \case
-  Just expr -> fmap Just (decodeExpr expr)
-  Nothing -> pure Nothing
 
 decodeBuiltinFunction :: LF1.BuiltinFunction -> Decode BuiltinExpr
 decodeBuiltinFunction = pure . \case

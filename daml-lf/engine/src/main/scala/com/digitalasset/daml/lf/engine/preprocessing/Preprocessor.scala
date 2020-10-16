@@ -146,7 +146,6 @@ private[engine] final class Preprocessor(compiledPackages: MutableCompiledPackag
       case Node.NodeCreate(coid @ _, coinst, optLoc @ _, sigs @ _, stks @ _, key @ _) =>
         coinst.template
       case Node.NodeExercises(
-          observers @ _,
           coid @ _,
           templateId,
           choice @ _,
@@ -156,6 +155,7 @@ private[engine] final class Preprocessor(compiledPackages: MutableCompiledPackag
           chosenVal @ _,
           stakeholders @ _,
           signatories @ _,
+          choiceObservers @ _,
           controllersDifferFromActors @ _,
           children @ _,
           exerciseResult @ _,
