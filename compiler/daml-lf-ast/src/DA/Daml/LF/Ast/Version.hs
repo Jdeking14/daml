@@ -127,6 +127,13 @@ featureToTextContractId = Feature
     , featureCppFlag = "DAML_TO_TEXT_CONTRACT_ID"
     }
 
+featureChoiceObservers :: Feature  -- issue #7709
+featureChoiceObservers = Feature
+    { featureName = "Choice observers"
+    , featureMinVersion = versionDev
+    , featureCppFlag = "DAML_CHOICE_OBSERVERS"
+    }
+
 allFeatures :: [Feature]
 allFeatures =
     [ featureNumeric
@@ -139,6 +146,7 @@ allFeatures =
     , featurePackageMetadata
     , featureUnstable
     , featureToTextContractId
+    , featureChoiceObservers
     ]
 
 allFeaturesForVersion :: Version -> [Feature]

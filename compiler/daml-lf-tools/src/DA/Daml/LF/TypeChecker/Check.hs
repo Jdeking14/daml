@@ -661,8 +661,8 @@ checkTemplateChoice tpl (TemplateChoice _loc _ _ controllers mbObservers selfBin
   checkType retType KStar
   introExprVar param paramType $ checkExpr controllers (TList TParty)
   introExprVar param paramType $ do
-    whenJust mbObservers $ \observers ->
-      -- NICK: check version allows choice-observers, need new feature flag in Version.hs
+    whenJust mbObservers $ \observers -> do
+      _checkFeature featureChoiceObservers
       checkExpr observers (TList TParty)
   introExprVar selfBinder (TContractId (TCon tpl)) $ introExprVar param paramType $
     checkExpr upd (TUpdate retType)
