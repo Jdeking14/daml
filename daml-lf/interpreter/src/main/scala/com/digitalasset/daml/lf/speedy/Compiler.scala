@@ -889,12 +889,10 @@ private[lf] final class Compiler(
             compile(choice.controllers)
           }, //
           {
-            val observers = choice.observers match {
-              case Some(observers) => observers
-              case None =>
-                ENil(TBuiltin(BTParty)) //NICK: construct value directly, something like --  SValue.SValue.EmptyList
+            choice.observers match {
+              case Some(observers) => compile(observers)
+              case None => SEValue.EmptyList
             }
-            compile(observers)
           },
           mbKey.fold(compileKeyWithMaintainers(tmpl.key))(pos => SBSome(svar(pos))),
         )
