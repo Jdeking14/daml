@@ -39,6 +39,7 @@ private[parser] object Lexer extends RegexParsers {
     "fetch_by_key" -> `fetch_by_key`,
     "lookup_by_key" -> `lookup_by_key`,
     "by" -> `by`,
+    "ob" -> `ob`,
     "to" -> `to`,
     "to_any" -> `to_any`,
     "from_any" -> `from_any`,

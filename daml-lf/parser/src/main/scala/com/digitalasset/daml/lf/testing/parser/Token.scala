@@ -50,6 +50,7 @@ private[parser] object Token {
   case object `fetch_by_key` extends Token
   case object `lookup_by_key` extends Token
   case object `by` extends Token
+  case object `ob` extends Token
   case object `to` extends Token
   case object `to_any` extends Token
   case object `from_any` extends Token

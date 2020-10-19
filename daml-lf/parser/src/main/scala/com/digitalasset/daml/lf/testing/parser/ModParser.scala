@@ -135,13 +135,16 @@ private[parser] class ModParser[P](parameters: ParserParameters[P]) {
     `(` ~> id <~ `)`
 
   private lazy val templateChoice: Parser[(ChoiceName, TemplateChoice)] =
-    Id("choice") ~> tags(templateChoiceTags) ~ id ~ selfBinder ~ choiceParam ~ `:` ~ typ ~ `by` ~ expr ~ `to` ~ expr ^^ {
-      case choiceTags ~ name ~ self ~ param ~ _ ~ retTyp ~ _ ~ controllers ~ _ ~ update =>
+    Id("choice") ~> tags(templateChoiceTags) ~ id ~ selfBinder ~ choiceParam ~ `:` ~ typ ~
+      `by` ~ expr ~
+      opt(`ob` ~> expr) ~
+      `to` ~ expr ^^ {
+      case choiceTags ~ name ~ self ~ param ~ _ ~ retTyp ~ _ ~ controllers ~ observers ~ _ ~ update =>
         name -> TemplateChoice(
           name,
           !choiceTags(nonConsumingTag),
           controllers,
-          observers = None, //NICK, extend parser for optional choice-observers
+          observers,
           self,
           param,
           retTyp,
